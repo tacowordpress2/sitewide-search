@@ -68,12 +68,15 @@ In the following example, the post_date is unset for several post types so it wi
 ### Choosing which fields to return
 By default, all possible fields are returned in the JSON results.  You can override `getAllowedJSONFields()` to restrict which fields are returned
 
+### Featured Image
+This plugin by default can return featured images attached to posts at the `medium` size.  To change which size is returned, override the `FEATURED_IMAGE_SIZE` constant.
+
 ## Querying Data
 The plugin ships with a convenient JSON endpoint to query data against.  To query data, simply hit the endpoint `/sitewide-search-results/` with the following query parameters:
 
 * `sitewide-search-keyword`: **Required** - the keywords to use for the search
 * `sitewide-search-posttype`: The post type to search against.  Leave blank to get all post types
-* `sitewide-search-perpage`: Number of results per page.  Default is 10.  You can override the constant * `SEARCH_RESULTS_PER_PAGE` in `SiteWideSearchInstance.php` to override the default
+* `sitewide-search-perpage`: Number of results per page.  Default is 10.  You can override the constant `SEARCH_RESULTS_PER_PAGE` in `SiteWideSearchInstance.php` to override the default
 * `sitewide-search-pagenum`: The number of the page results to display.  Default is 1.
 * `sitewide-search-orderby`: What criteria to sort results by.  This can be any value that is returned by `getAllowedJSONFields()` plus `score`, which will order by relevance.  Default is `score`
 * `sitewide-search-order`: Whether to sort results in ascending or descending order.  Accepts `asc` or `desc`.  Default is `desc`
