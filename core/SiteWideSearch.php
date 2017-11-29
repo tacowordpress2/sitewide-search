@@ -200,23 +200,21 @@ Abstract Class SiteWideSearch {
 
   public function postModified($post_id, $force_update=false) {
     global $wpdb;
-    $table_name = static::TABLE_NAME;
+    $table_name = static::$table_name;
 
     // Grab the post
     if (empty($post_id)) {
       return;
     }
 
-    $taco_post = \Taco\Post\Factory::create($post_id);
-
-    if (!($taco_post)) {
-      return;
-    }
+    $post = get_post($post_id);
 
     // Check if the post is included in sitewide search
-    if (!array_key_exists($taco_post->post_type, static::getSearchableFields())) {
+    if (!array_key_exists($post->post_type, static::getSearchableFields())) {
       return;
     }
+
+    $taco_post = \Taco\Post\Factory::create($post_id);
 
     // Post was deleted
     if(in_array($taco_post->post_status, array('trash', 'pending', 'private', 'draft', 'auto-draft', 'inherit'))
@@ -224,15 +222,7 @@ Abstract Class SiteWideSearch {
       return static::postDeleted($post_id);
     }
 
-    // Get searchable fields array
-    $child_class = get_called_class();
-    $searchable_fields = $child_class::getSearchableFields();
-
-    // Don't do anything if we're not indexing this post type
-    if (empty($searchable_fields[$taco_post->post_type])) {
-      return;
-    }
-    $post_type_fields = $searchable_fields[$taco_post->post_type];
+    $post_type_fields = static::getSearchableFields()[$taco_post->post_type];
 
     // Grab taxonomies and terms
     $tax_terms = wp_get_post_terms($taco_post->ID, get_taxonomies());
