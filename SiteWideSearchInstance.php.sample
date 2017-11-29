@@ -1,0 +1,79 @@
+<?php
+require_once __DIR__ . '/core/SiteWideSearch.php';
+
+class SiteWideSearchInstance extends SiteWideSearch {
+
+  // return a multi-dimensional array containing keys of post types and values of field => points
+  // leaving the key empty will assume overriding default fields
+  public static function getSearchableFields() {
+    return array(
+      'page' => array(
+        'post_content' => 1,
+        'post_title' => 4,
+        'meta_fields' => [
+          'panel_grid_panels::title' => 1,
+          'panel_grid_panels::caption' => 1,
+        ],
+      ),
+      'post' => array(
+        'post_title' => 4,
+        'post_content' => 1,
+      ),
+      'fellow' => array(
+        'post_title' => 4,
+        'post_content' => 1,
+        'terms' => 1,
+      ),
+      'leader' => array(
+        'post_title' => 4,
+        'post_content' => 1,
+        'terms' => 1,
+      ),
+      'grant' => array(
+        'post_title' => 4,
+        'post_content' => 1,
+        'terms' => 1,
+        'meta_fields' => [
+          'grant_year' => 1,
+        ]
+      ),
+      'board-member' => array(
+        'post_title' => 4,
+        'post_content' => 1,
+        'terms' => 1,
+      ),
+      'team-member' => array(
+        'post_title' => 6,
+        'post_content' => 1,
+        'terms' => 1,
+        'meta_fields' => [
+          'email' => 4,
+          'title' => 1,
+        ],
+      ),
+      'publication' => array(
+        'post_title' => 4,
+        'post_content' => 1,
+        'terms' => 1,
+      ),
+    );
+  }
+
+  public static function getJSONFields($results) {
+    $results = array_map(function($result) {
+      switch ($result['post_type']) {
+        case 'page':
+        case 'board-member':
+        case 'team-member':
+        case 'fellow':
+        case 'leader':
+          $result['post_date'] = '';
+          break;
+      }
+
+      return $result;
+    }, parent::getJSONFields($results));
+
+    return $results;
+  }
+}
