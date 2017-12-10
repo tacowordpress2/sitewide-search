@@ -200,7 +200,7 @@ Abstract Class SiteWideSearch {
 
   public function postModified($post_id, $force_update=false) {
     global $wpdb;
-    $table_name = static::$table_name;
+    $table_name = static::TABLE_NAME;
 
     // Grab the post
     if (empty($post_id)) {
