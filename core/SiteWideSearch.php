@@ -257,7 +257,7 @@ Abstract Class SiteWideSearch {
 
       foreach ($post_type_fields['meta_fields'] as $meta_field => $meta_weight) {
         // Handle addmany fields
-        if (strpos($meta_field, '::') !== -1) {
+        if (strpos($meta_field, '::') !== false) {
           $meta_field_parts = explode('::', $meta_field);
 
           if (Arr::iterable($taco_post->{$meta_field_parts[0]})) {
